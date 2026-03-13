@@ -12,6 +12,7 @@ namespace ECommerce_MVC.Models.Model
         public int StockQuantity { get; set; }
         public bool IsActive { get; set; }
         public DateTime CreatedAt { get; set; }
+        public string ImageUrl { get; set; }
 
         // Foreign Key
         public int CategoryId { get; set; }

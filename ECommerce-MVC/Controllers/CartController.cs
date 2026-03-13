@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using System.Text.Json;
 using ECommerce_MVC.Models.VIEWMODELS;
+
 namespace ECommerce_MVC.Controllers
 {
     public class CartController : Controller
@@ -13,13 +14,15 @@ namespace ECommerce_MVC.Controllers
             this.uow = uow;
         }
 
-        public async Task<IActionResult> Add(int id)
+        [HttpPost]
+        public async Task<IActionResult> Add(int productId, int quantity = 1)
         {
-            var product = await uow.products.GetByIdAsync(id);
+            var product = await uow.products.GetByIdAsync(productId);
             if (product == null)
             {
                 return NotFound();
             }
+
             List<CartItemVM> cartList;
             var cart = HttpContext.Session.GetString("ShoppingCart");
             if (cart == null)
@@ -30,10 +33,11 @@ namespace ECommerce_MVC.Controllers
             {
                 cartList = JsonSerializer.Deserialize<List<CartItemVM>>(cart);
             }
-            if (cartList.Any(c => c.ProductId == id))
+
+            if (cartList.Any(c => c.ProductId == productId))
             {
-                var item = cartList.FirstOrDefault(c => c.ProductId == id);
-                item.Quantity++;
+                var item = cartList.FirstOrDefault(c => c.ProductId == productId);
+                item.Quantity += quantity;
             }
             else
             {
@@ -42,18 +46,24 @@ namespace ECommerce_MVC.Controllers
                     ProductId = product.ProductId,
                     ProductName = product.Name,
                     Price = product.Price,
-                    Quantity = 1
+                    Quantity = quantity
                 });
             }
 
             HttpContext.Session.SetString("ShoppingCart", JsonSerializer.Serialize(cartList));
+
             string returnUrl = Request.Headers["Referer"].ToString();
-           if (!string.IsNullOrEmpty(returnUrl))
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+            {
+                return Json(new { success = true, count = cartList.Sum(x => x.Quantity) });
+            }
+            if (!string.IsNullOrEmpty(returnUrl))
             {
                 return Redirect(returnUrl);
             }
             return RedirectToAction("Index");
         }
+
         public IActionResult Index()
         {
             var cartJson = HttpContext.Session.GetString("ShoppingCart");
@@ -75,6 +85,7 @@ namespace ECommerce_MVC.Controllers
 
             return View(cartVM);
         }
+
         public IActionResult Remove(int id)
         {
             var cartJson = HttpContext.Session.GetString("ShoppingCart");
@@ -91,14 +102,15 @@ namespace ECommerce_MVC.Controllers
             }
             return RedirectToAction("Index");
         }
+
         public IActionResult Clear()
         {
             HttpContext.Session.Remove("ShoppingCart");
             return RedirectToAction("Index");
         }
+
         public IActionResult Decrease(int id)
         {
-            // 1. Get the cart from session
             var cartJson = HttpContext.Session.GetString("ShoppingCart");
             if (string.IsNullOrEmpty(cartJson))
             {

@@ -4,8 +4,10 @@ using ECommerce_MVC.Models.VIEWMODELS;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using ECommerce_MVC.Models.Model;
+
 namespace ECommerce_MVC.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class CategoryController : Controller
     {
         IUnitOfWork uow;
@@ -13,6 +15,8 @@ namespace ECommerce_MVC.Controllers
         {
             this.uow = uow;
         }
+
+        [AllowAnonymous]
         public async Task<IActionResult> Index()
         {
             var categories = await uow.Categories.GetCategoriesWithParentsAsync();
@@ -27,12 +31,14 @@ namespace ECommerce_MVC.Controllers
 
             return View(vm);
         }
+
         public async Task<IActionResult> create()
         {
             var categories = await uow.Categories.GetAllAsync();
             ViewBag.Categories = categories;
             return View();
         }
+
         [HttpPost]
         public async Task<IActionResult> Create(CategoryVM vm)
         {
@@ -51,13 +57,12 @@ namespace ECommerce_MVC.Controllers
             ViewBag.Categories = categories;
             return View(vm);
         }
+
         public async Task<ActionResult> Edit(int id)
         {
             var category = await uow.Categories.GetByIdAsync(id);
-            if (category == null)
-            {
-                return NotFound();
-            }
+            if (category == null) return NotFound();
+
             var vm = new CategoryVM
             {
                 CategoryId = category.CategoryId,
@@ -68,6 +73,7 @@ namespace ECommerce_MVC.Controllers
             ViewBag.Categories = CategoryList.Where(category => category.CategoryId != id).ToList();
             return View(vm);
         }
+
         [HttpPost]
         public async Task<IActionResult> Edit(CategoryVM vm)
         {
@@ -85,6 +91,7 @@ namespace ECommerce_MVC.Controllers
             }
             return View(vm);
         }
+
         public async Task<ActionResult> Delete(int id)
         {
             var category = await uow.Categories.GetByIdAsync(id);
@@ -93,9 +100,11 @@ namespace ECommerce_MVC.Controllers
             await uow.CompleteAsync();
             return RedirectToAction(nameof(Index));
         }
+
+        [AllowAnonymous]
         public async Task<ActionResult> Details(int id)
         {
-            var category= await uow.Categories.GetByIdAsync((int)id);
+            var category = await uow.Categories.GetByIdAsync((int)id);
             if (category == null) return NotFound();
             var vm = new CategoryVM
             {
@@ -105,6 +114,5 @@ namespace ECommerce_MVC.Controllers
             };
             return View(vm);
         }
-
     }
-    }
+}

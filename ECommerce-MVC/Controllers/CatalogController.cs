@@ -1,9 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using ECommerce_MVC.Models.Model;
 using ECommerce_MVC.Models.Repos;
 using ECommerce_MVC.Models.VIEWMODELS;
-using X.PagedList;
+using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using System.Threading.Tasks;
+using X.PagedList;
 using X.PagedList.Extensions;
 
 namespace ECommerce_MVC.Controllers
@@ -54,7 +55,8 @@ namespace ECommerce_MVC.Controllers
                 Price = entity.Price,
                 SKU = entity.SKU,
                 StockQuantity = entity.StockQuantity,
-                CategoryName = entity.Category?.Name
+                CategoryName = entity.Category?.Name,
+                ImageUrl = entity.ImageUrl
             };
 
             return View(vm);

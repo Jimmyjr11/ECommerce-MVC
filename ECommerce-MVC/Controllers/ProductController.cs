@@ -1,11 +1,15 @@
 ﻿using ECommerce_MVC.Models.Model;
 using ECommerce_MVC.Models.Repos;
 using ECommerce_MVC.Models.VIEWMODELS;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace ECommerce_MVC.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class ProductController : Controller
     {
         IUnitOfWork uow;
@@ -14,6 +18,7 @@ namespace ECommerce_MVC.Controllers
             this.uow = uow;
         }
 
+        [AllowAnonymous]
         public async Task<IActionResult> Index()
         {
             var entity = await uow.products.GetAllAsync();
@@ -30,6 +35,7 @@ namespace ECommerce_MVC.Controllers
             });
             return View(vm);
         }
+
         public async Task<IActionResult> Create()
         {
             var categories = await uow.Categories.GetAllAsync();
@@ -37,10 +43,11 @@ namespace ECommerce_MVC.Controllers
 
             return View();
         }
+
         [HttpPost]
-        public async Task<ActionResult>Create(ProductVM vm)
+        public async Task<ActionResult> Create(ProductVM vm)
         {
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 var product = new Product
                 {
@@ -50,27 +57,28 @@ namespace ECommerce_MVC.Controllers
                     IsActive = vm.IsActive,
                     CategoryId = vm.CategoryId,
                     StockQuantity = vm.StockQuantity,
-                    CreatedAt= DateTime.Now,
+                    CreatedAt = DateTime.Now,
                 };
                 await uow.products.AddAsync(product);
                 await uow.CompleteAsync();
-                return RedirectToAction("index");
+                return RedirectToAction("Index");
             }
             ViewBag.Categories = await uow.Categories.GetAllAsync();
             return View(vm);
         }
+
         public async Task<IActionResult> Edit(int id)
         {
             var entity = await uow.products.GetByIdAsync(id);
 
             if (entity == null)
             {
-                return NotFound(); 
+                return NotFound();
             }
 
             var vm = new ProductVM
             {
-                ProductId = entity.ProductId, 
+                ProductId = entity.ProductId,
                 Name = entity.Name,
                 Price = entity.Price,
                 SKU = entity.SKU,
@@ -81,10 +89,10 @@ namespace ECommerce_MVC.Controllers
 
             ViewBag.Categories = await uow.Categories.GetAllAsync();
 
-            return View(vm); 
+            return View(vm);
         }
-        [HttpPost]
-        [HttpPost]
+
+        [HttpPost] 
         public async Task<ActionResult> Edit(ProductVM vm)
         {
             if (ModelState.IsValid)
@@ -108,10 +116,20 @@ namespace ECommerce_MVC.Controllers
             ViewBag.Categories = await uow.Categories.GetAllAsync();
             return View(vm);
         }
+
+        public async Task<ActionResult> Delete(int id)
+        {
+            var product = await uow.products.GetByIdAsync(id);
+            if (product == null) return NotFound();
+            uow.products.Delete(id);
+            await uow.CompleteAsync();
+            return RedirectToAction(nameof(Index));
+        }
+        [AllowAnonymous]
         public async Task<ActionResult> details(int id)
         {
-            var entity=await uow.products.GetByIdAsync(id);
-            if(entity== null)
+            var entity = await uow.products.GetByIdAsync(id);
+            if (entity == null)
             {
                 return NotFound();
             }
@@ -128,14 +146,5 @@ namespace ECommerce_MVC.Controllers
             };
             return View(vm);
         }
-        public async Task<ActionResult> Delete(int id)
-        {
-            var product = await uow.products.GetByIdAsync(id);
-            if (product == null) return NotFound();
-            uow.products.Delete(id);
-            await uow.CompleteAsync();
-            return RedirectToAction(nameof(Index));
-        }
     }
 }
-

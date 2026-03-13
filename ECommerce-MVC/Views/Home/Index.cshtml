@@ -2,7 +2,49 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="px-4 py-5 my-5 text-center rounded shadow-sm" style="background-color: var(--salem-bg);">
+    <h1 class="display-4 fw-bold" style="color: var(--salem-charcoal);">Welcome to Salem's</h1>
+    <div class="col-lg-6 mx-auto">
+        <p class="lead mb-4 text-muted">
+            Premium electronics and family-trusted service. Discover our curated collection of high-end laptops, smartphones, and gaming gear.
+        </p>
+        <div class="d-grid gap-2 d-sm-flex justify-content-sm-center mt-4">
+            <a asp-controller="Catalog" asp-action="Index" class="btn btn-primary btn-lg px-4 gap-3 shadow-sm">
+                Shop the Catalog
+            </a>
+            <a asp-controller="Category" asp-action="Index" class="btn btn-outline-secondary btn-lg px-4 bg-white">
+                Browse Categories
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="container px-4 py-5" id="featured-3">
+    <h2 class="pb-2 border-bottom fw-bold text-center mb-5" style="color: var(--salem-charcoal);">The Salem's Promise</h2>
+
+    <div class="row g-4 py-5 row-cols-1 row-cols-lg-3">
+        <div class="feature col text-center">
+            <div class="feature-icon mb-4 d-inline-flex align-items-center justify-content-center fs-1 rounded-circle shadow-sm" style="width: 80px; height: 80px; background-color: white;">
+                <i class="bi bi-shield-check" style="color: var(--salem-sage);"></i>
+            </div>
+            <h3 class="fs-4 fw-bold">Trusted Quality</h3>
+            <p class="text-muted">Every product we sell is verified for quality. As a family business, our reputation is in every box we ship.</p>
+        </div>
+
+        <div class="feature col text-center">
+            <div class="feature-icon mb-4 d-inline-flex align-items-center justify-content-center fs-1 rounded-circle shadow-sm" style="width: 80px; height: 80px; background-color: white;">
+                <i class="bi bi-truck" style="color: var(--salem-terracotta);"></i>
+            </div>
+            <h3 class="fs-4 fw-bold">Fast Delivery</h3>
+            <p class="text-muted">We ensure your premium electronics reach your doorstep safely and swiftly.</p>
+        </div>
+
+        <div class="feature col text-center">
+            <div class="feature-icon mb-4 d-inline-flex align-items-center justify-content-center fs-1 rounded-circle shadow-sm" style="width: 80px; height: 80px; background-color: white;">
+                <i class="bi bi-headset" style="color: var(--salem-charcoal);"></i>
+            </div>
+            <h3 class="fs-4 fw-bold">Dedicated Support</h3>
+            <p class="text-muted">Need help choosing a laptop or setting up your PS5? Our family is here to help yours.</p>
+        </div>
+    </div>
 </div>

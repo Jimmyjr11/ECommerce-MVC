@@ -21,11 +21,13 @@ namespace ECommerce_MVC.Models.Repos
         {
             return await context.Orders.Include(o => o.User).ToListAsync();
         }
-        public async Task<Order?> GetByIdAsync(int id)
+        public async Task<Order> GetByIdAsync(int id)
         {
             return await context.Orders
-                .Include(o => o.User)
-                .Include(o => o.OrderItems) 
+                .Include(o => o.OrderItems)       
+                 .ThenInclude(oi => oi.Product)   
+                .Include(o => o.ShippingAddress)   
+                .Include(o => o.User)               
                 .FirstOrDefaultAsync(o => o.OrderId == id);
         }
 

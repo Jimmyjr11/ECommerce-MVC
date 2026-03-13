@@ -20,7 +20,7 @@ namespace ECommerce_MVC.Models.VIEWMODELS
         public int StockQuantity { get; set; }
 
         public bool IsActive { get; set; } = true;
-
+        public string? ImageUrl { get; set; }
         [Display(Name = "Category")]
         public int CategoryId { get; set; }
 

@@ -5,45 +5,53 @@
 
 <div class="row justify-content-center">
     <div class="col-md-6">
-        <div class="card shadow-sm">
-            <div class="card-header bg-primary text-white">
-                <h2 class="mb-0">Create a New Account</h2>
+        <div class="card border-0 shadow-sm mt-4 rounded-4 p-3">
+            <div class="card-header bg-white border-bottom-0 text-center pt-4">
+                <h2 class="mb-0 fw-bold" style="color: var(--salem-charcoal);">Join Salem's</h2>
+                <p class="text-muted mt-2">Create an account for faster checkout</p>
             </div>
-            <div class="card-body">
+
+            <div class="card-body px-4">
                 <form asp-action="Register" method="post">
                     <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
 
                     <div class="mb-3">
-                        <label asp-for="FullName" class="form-label"></label>
-                        <input asp-for="FullName" class="form-control" placeholder="Enter your full name" />
+                        <label asp-for="FullName" class="form-label fw-semibold" style="color: var(--salem-charcoal);"></label>
+                        <input asp-for="FullName" class="form-control shadow-sm" placeholder="Enter your full name" style="border-radius: 0.5rem;" />
                         <span asp-validation-for="FullName" class="text-danger"></span>
                     </div>
 
                     <div class="mb-3">
-                        <label asp-for="Email" class="form-label"></label>
-                        <input asp-for="Email" class="form-control" placeholder="example@domain.com" />
+                        <label asp-for="Email" class="form-label fw-semibold" style="color: var(--salem-charcoal);"></label>
+                        <input asp-for="Email" class="form-control shadow-sm" placeholder="example@domain.com" style="border-radius: 0.5rem;" />
                         <span asp-validation-for="Email" class="text-danger"></span>
                     </div>
 
-                    <div class="mb-3">
-                        <label asp-for="Password" class="form-label"></label>
-                        <input asp-for="Password" class="form-control" />
-                        <span asp-validation-for="Password" class="text-danger"></span>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="Password" class="form-label fw-semibold" style="color: var(--salem-charcoal);"></label>
+                            <input asp-for="Password" class="form-control shadow-sm" style="border-radius: 0.5rem;" />
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                        </div>
+
+                        <div class="col-md-6 mb-4">
+                            <label asp-for="ConfirmPassword" class="form-label fw-semibold" style="color: var(--salem-charcoal);"></label>
+                            <input asp-for="ConfirmPassword" class="form-control shadow-sm" style="border-radius: 0.5rem;" />
+                            <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                        </div>
                     </div>
 
-                    <div class="mb-3">
-                        <label asp-for="ConfirmPassword" class="form-label"></label>
-                        <input asp-for="ConfirmPassword" class="form-control" />
-                        <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
-                    </div>
-
-                    <div class="d-grid gap-2">
-                        <button type="submit" class="btn btn-primary btn-lg">Register</button>
+                    <div class="d-grid gap-2 mb-2">
+                        <button type="submit" class="btn btn-primary btn-lg shadow-sm" style="border-radius: 0.5rem;">Create Account</button>
                     </div>
                 </form>
             </div>
-            <div class="card-footer text-center">
-                <p class="mb-0">Already have an account? <a asp-action="Login">Login here</a></p>
+
+            <div class="card-footer bg-white border-top-0 text-center pb-4">
+                <p class="mb-0 text-muted">
+                    Already have an account?
+                    <a asp-action="Login" class="fw-bold text-decoration-none" style="color: var(--salem-terracotta);">Login here</a>
+                </p>
             </div>
         </div>
     </div>

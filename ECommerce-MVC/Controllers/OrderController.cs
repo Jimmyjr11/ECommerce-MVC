@@ -8,15 +8,18 @@ using System.Threading.Tasks;
 
 namespace ECommerce_MVC.Controllers
 {
+    [Authorize]
     public class OrderController : Controller
     {
         IUnitOfWork uow;
         private readonly UserManager<AppUser> _userManager;
-        public OrderController(IUnitOfWork uow,UserManager<AppUser>userManager)
+
+        public OrderController(IUnitOfWork uow, UserManager<AppUser> userManager)
         {
             this.uow = uow;
-            _userManager = userManager; 
+            _userManager = userManager;
         }
+
         public ActionResult CheckOut()
         {
             var cartJson = HttpContext.Session.GetString("ShoppingCart");
@@ -32,7 +35,8 @@ namespace ECommerce_MVC.Controllers
             };
             return View(checkoutVM);
         }
-        [HttpPost]    
+
+        [HttpPost]
         public async Task<ActionResult> CheckOut(CheckoutVM vm)
         {
             ModelState.Remove("cartItems");
@@ -107,16 +111,19 @@ namespace ECommerce_MVC.Controllers
 
             return RedirectToAction("Success");
         }
+
         public IActionResult Success()
         {
             return View();
         }
+
         public async Task<IActionResult> MyOrders()
         {
             string currentUserId = _userManager.GetUserId(User);
             var userOrders = await uow.Orders.GetOrdersByUserIdAsync(currentUserId);
             return View(userOrders);
         }
+
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Manage()
         {
@@ -124,6 +131,7 @@ namespace ECommerce_MVC.Controllers
             var sortedOrders = allOrders.OrderByDescending(o => o.OrderDate).ToList();
             return View(sortedOrders);
         }
+
         [HttpPost]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Manage(int orderId, int newStatus)
@@ -139,6 +147,7 @@ namespace ECommerce_MVC.Controllers
 
             return RedirectToAction(nameof(Manage));
         }
+
         public async Task<IActionResult> Details(int id)
         {
             var order = await uow.Orders.GetByIdAsync(id);
@@ -147,11 +156,13 @@ namespace ECommerce_MVC.Controllers
             {
                 return NotFound();
             }
+
             var currentUserId = _userManager.GetUserId(User);
             if (order.UserId != currentUserId && !User.IsInRole("Admin"))
             {
-                return Forbid(); 
+                return Forbid();
             }
+
             var vm = new OrderDetailsVM
             {
                 OrderHeader = order,

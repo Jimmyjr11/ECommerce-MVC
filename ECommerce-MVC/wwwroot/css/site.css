@@ -1,31 +1,122 @@
-html {
-  font-size: 14px;
-}
-
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
-}
-
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-}
-
-html {
-  position: relative;
-  min-height: 100%;
+/* =========================================
+   SALEM'S BRAND COLORS & TYPOGRAPHY
+   ========================================= */
+:root {
+    --salem-bg: #F9F8F6; /* Warm Off-White */
+    --salem-charcoal: #2D3033; /* Soft Dark Grey */
+    --salem-terracotta: #C27B5E; /* Warm Brand Accent */
+    --salem-terracotta-hover: #b0694c;
+    --salem-sage: #748C70; /* Success/Secondary Accent */
+    --salem-sage-hover: #637a5f;
+    --salem-card-bg: #FFFFFF;
 }
 
 body {
-  margin-bottom: 60px;
+    background-color: var(--salem-bg) !important;
+    color: var(--salem-charcoal);
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    margin-bottom: 60px;
+}
+.custom-navbar {
+    background-color: var(--salem-card-bg);
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+}
+
+.navbar-brand {
+    color: var(--salem-charcoal) !important;
+    font-size: 1.5rem;
+    letter-spacing: 1.5px;
+}
+
+.nav-link {
+    color: var(--salem-charcoal) !important;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+    .nav-link:hover {
+        color: var(--salem-terracotta) !important;
+    }
+
+/* =========================================
+   BUTTON & COMPONENT OVERRIDES
+   ========================================= */
+.btn-primary {
+    background-color: var(--salem-terracotta);
+    border-color: var(--salem-terracotta);
+    color: white;
+}
+
+    .btn-primary:hover, .btn-primary:active, .btn-primary:focus {
+        background-color: var(--salem-terracotta-hover) !important;
+        border-color: var(--salem-terracotta-hover) !important;
+    }
+
+.btn-success {
+    background-color: var(--salem-sage);
+    border-color: var(--salem-sage);
+}
+
+    .btn-success:hover, .btn-success:active, .btn-success:focus {
+        background-color: var(--salem-sage-hover) !important;
+        border-color: var(--salem-sage-hover) !important;
+    }
+
+.bg-white {
+    background-color: var(--salem-card-bg) !important;
+}
+
+.shadow-sm {
+    box-shadow: 0 0.125rem 0.25rem rgba(45, 48, 51, 0.04) !important;
+}
+
+/* =========================================
+   ORIGINAL BOOTSTRAP UTILITIES
+   ========================================= */
+html {
+    font-size: 14px;
+    position: relative;
+    min-height: 100%;
+}
+
+@media (min-width: 768px) {
+    html {
+        font-size: 16px;
+    }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem var(--salem-terracotta);
+    border-color: var(--salem-terracotta);
 }
 
 .form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
-  color: var(--bs-secondary-color);
-  text-align: end;
+    color: var(--bs-secondary-color);
+    text-align: end;
 }
 
 .form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
-  text-align: start;
+    text-align: start;
 }
+/* =========================================
+   KILL THE BOOTSTRAP BLUE (Sidebar & Pagination)
+   ========================================= */
+.list-group-item.active {
+    background-color: var(--salem-terracotta) !important;
+    border-color: var(--salem-terracotta) !important;
+    color: white !important;
+}
+
+.page-item.active .page-link {
+    background-color: var(--salem-terracotta) !important;
+    border-color: var(--salem-terracotta) !important;
+    color: white !important;
+}
+
+.page-link {
+    color: var(--salem-charcoal);
+}
+
+    .page-link:hover {
+        color: var(--salem-terracotta);
+    }
