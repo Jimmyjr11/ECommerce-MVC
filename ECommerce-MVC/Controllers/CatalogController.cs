@@ -1,7 +1,10 @@
-﻿using ECommerce_MVC.Models.Repos;
+﻿using Microsoft.AspNetCore.Mvc;
+using ECommerce_MVC.Models.Repos;
 using ECommerce_MVC.Models.VIEWMODELS;
-using Microsoft.AspNetCore.Mvc;
+using X.PagedList;
+using System.Linq;
 using System.Threading.Tasks;
+using X.PagedList.Extensions;
 
 namespace ECommerce_MVC.Controllers
 {
@@ -9,19 +12,33 @@ namespace ECommerce_MVC.Controllers
     {
         private readonly IUnitOfWork uow;
 
-        // The Controller asks for the UnitOfWork here!
         public CatalogController(IUnitOfWork uow)
         {
             this.uow = uow;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? categoryId,string q , int? page)
         {
             var products=await uow.products.GetAllAsync();
-            var active=products.Where(p=>p.IsActive==true).ToList();
-
-
-            return View(active);
+            var categories=await uow.Categories.GetAllAsync();
+            if(categoryId.HasValue)
+            {
+                products=products.Where(p=>p.CategoryId==categoryId.Value).ToList();
+            }
+            if(!string.IsNullOrEmpty(q))
+            {
+                products=products.Where(p=>p.Name.ToLower().Contains(q.ToLower())).ToList();
+            }
+            int pageSize = 6;
+            int pageNumber = page ?? 1;
+            var vm = new ProductListVM
+            {
+                Products = products.Where(p=>p.IsActive).ToPagedList(pageNumber,pageSize),
+                Categories = categories,
+                CurrentCategoryId = categoryId,
+                CurrentSearchQuery = q
+            };
+            return View(vm);
         }
         public async Task<IActionResult> Details(int id)
         {
