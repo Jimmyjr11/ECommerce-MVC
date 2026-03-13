@@ -1,0 +1,63 @@
+﻿@model IEnumerable<CategoryVM>
+
+@{
+    ViewData["Title"] = "Category Management";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="display-6">Categories</h1>
+    <a asp-action="Create" class="btn btn-success shadow-sm">
+        <i class="bi bi-plus-circle"></i> Create New Category
+    </a>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-hover align-middle shadow-sm bg-white rounded">
+        <thead class="table-dark">
+            <tr>
+                <th style="width: 10%">ID</th>
+                <th style="width: 40%">Category Name</th>
+                <th style="width: 30%">Parent Category</th>
+                <th style="width: 20%" class="text-center">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Any())
+            {
+                foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.CategoryId</td>
+                        <td class="fw-bold">@item.CategoryName</td>
+                        <td>
+                            @if (!string.IsNullOrEmpty(item.ParentCategoryName))
+                            {
+                                <span class="badge bg-info text-dark">@item.ParentCategoryName</span>
+                            }
+                            else
+                            {
+                                <span class="text-muted small">Main Category</span>
+                            }
+                        </td>
+                        <td class="text-center">
+                            <div class="btn-group btn-group-sm">
+                                <a asp-action="Edit" asp-route-id="@item.CategoryId" class="btn btn-outline-primary">Edit</a>
+                                <a asp-action="Details" asp-route-id="@item.CategoryId" class="btn btn-outline-primary">Details</a>
+                                <a asp-action="Delete" asp-route-id="@item.CategoryId" class="btn btn-outline-danger"
+                                   onclick="return confirm('Are you sure you want to delete this category?')">Delete</a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="4" class="text-center py-4 text-muted">
+                        No categories found. Click "Create New" to add one.
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

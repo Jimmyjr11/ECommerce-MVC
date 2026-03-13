@@ -1,0 +1,54 @@
+﻿@model CategoryVM
+
+@{
+    ViewData["Title"] = "Category Details";
+}
+
+<div class="container mt-4">
+    <div class="card shadow">
+        <div class="card-header bg-info text-white">
+            <h3 class="card-title mb-0">Category Information</h3>
+        </div>
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-3">
+                    @Html.DisplayNameFor(model => model.CategoryId)
+                </dt>
+                <dd class="col-sm-9">
+                    <span class="badge bg-secondary">@Model.CategoryId</span>
+                </dd>
+
+                <dt class="col-sm-3">
+                    @Html.DisplayNameFor(model => model.CategoryName)
+                </dt>
+                <dd class="col-sm-9">
+                    @Model.CategoryName
+                </dd>
+
+                <dt class="col-sm-3">
+                    Parent Category
+                </dt>
+                <dd class="col-sm-9">
+                    @if (!string.IsNullOrEmpty(Model.ParentCategoryName))
+                    {
+                        <span class="text-primary fw-bold">@Model.ParentCategoryName</span>
+                    }
+                    else
+                    {
+                        <span class="text-muted">None (This is a Root Category)</span>
+                    }
+                </dd>
+            </dl>
+        </div>
+        <div class="card-footer bg-light">
+            <div class="btn-group">
+                <a asp-action="Edit" asp-route-id="@Model.CategoryId" class="btn btn-warning">
+                    <i class="bi bi-pencil"></i> Edit
+                </a>
+                <a asp-action="Index" class="btn btn-secondary">
+                    <i class="bi bi-arrow-left"></i> Back to List
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

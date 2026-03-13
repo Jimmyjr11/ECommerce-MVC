@@ -1,0 +1,65 @@
+﻿@model IEnumerable<ECommerce_MVC.Models.Model.Order>
+
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2><i class="bi bi-gear-fill text-warning"></i> Manage Customer Orders</h2>
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info text-center">No orders have been placed yet.</div>
+    }
+    else
+    {
+        <div class="table-responsive shadow-sm rounded">
+            <table class="table table-hover align-middle bg-white mb-0">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Order #</th>
+                        <th>Customer</th>
+                        <th>Date</th>
+                        <th>Total</th>
+                        <th>Status</th>
+                        <th>Details</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var order in Model)
+                    {
+                        <tr>
+                            <td class="fw-bold">@order.OrderNumber</td>
+
+                            <td>@(order.User?.FullName ?? order.User?.Email ?? "Guest")</td>
+
+                            <td>@order.OrderDate.ToString("MMM dd, yyyy - HH:mm")</td>
+                            <td class="text-primary fw-bold">@order.TotalAmount.ToString("C")</td>
+
+                            <td>
+                                <form asp-action="Manage" method="post" class="d-flex align-items-center">
+                                    <input type="hidden" name="orderId" value="@order.OrderId" />
+
+                                    <select name="newStatus" class="form-select form-select-sm me-2" style="width: 140px;">
+                                        <option value="1" selected="@(order.Status == 1)">Pending</option>
+                                        <option value="2" selected="@(order.Status == 2)">Processing</option>
+                                        <option value="3" selected="@(order.Status == 3)">Shipped</option>
+                                        <option value="4" selected="@(order.Status == 4)">Delivered</option>
+                                        <option value="5" selected="@(order.Status == 5)">Cancelled</option>
+                                    </select>
+
+                                    <button type="submit" class="btn btn-sm btn-outline-success">
+                                        Update
+                                    </button>
+                                </form>
+                            </td>
+                            <td>
+                                <a asp-action="Details" asp-route-id="@order.OrderId" class="btn btn-sm btn-info text-white">
+                                    <i class="bi bi-eye"></i> View
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>

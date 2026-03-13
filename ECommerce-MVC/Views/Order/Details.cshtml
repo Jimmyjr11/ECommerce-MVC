@@ -1,0 +1,86 @@
+﻿@model ECommerce_MVC.Models.VIEWMODELS.OrderDetailsVM
+
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2><i class="bi bi-receipt"></i> Order Details</h2>
+
+        @if (User.IsInRole("Admin"))
+        {
+            <a asp-action="Manage" class="btn btn-outline-secondary"><i class="bi bi-arrow-left"></i> Back to Orders</a>
+        }
+        else
+        {
+            <a asp-action="MyOrders" class="btn btn-outline-secondary"><i class="bi bi-arrow-left"></i> Back to My Orders</a>
+        }
+    </div>
+
+    <div class="row">
+        <div class="col-md-12 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-header bg-dark text-white fw-bold">
+                    Order #@Model.OrderHeader.OrderNumber
+                </div>
+                <div class="card-body row">
+                    <div class="col-md-6 border-end">
+                        <h5 class="text-muted mb-3">Order Information</h5>
+                        <p><strong>Date:</strong> @Model.OrderHeader.OrderDate.ToString("f")</p>
+                        <p>
+                            <strong>Status:</strong>
+                            <span class="badge @(Model.OrderHeader.Status == 1 ? "bg-warning text-dark" : "bg-success") fs-6">
+                                @(Model.OrderHeader.Status == 1 ? "Pending" : "Shipped/Completed")
+                            </span>
+                        </p>
+                        <p><strong>Customer:</strong> @(Model.OrderHeader.User?.FullName ?? Model.OrderHeader.User?.Email)</p>
+                    </div>
+                    <div class="col-md-6 pl-md-4">
+                        <h5 class="text-muted mb-3">Shipping Address</h5>
+                        @if (Model.OrderHeader.ShippingAddress != null)
+                        {
+                            <p class="mb-1">@Model.OrderHeader.ShippingAddress.Street</p>
+                            <p class="mb-1">@Model.OrderHeader.ShippingAddress.City, @Model.OrderHeader.ShippingAddress.Zip</p>
+                            <p class="mb-0">@Model.OrderHeader.ShippingAddress.Country</p>
+                        }
+                        else
+                        {
+                            <p class="text-danger">Address details not available.</p>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-12">
+            <div class="card shadow-sm">
+                <div class="card-body p-0">
+                    <table class="table table-hover mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Product</th>
+                                <th>Price</th>
+                                <th>Quantity</th>
+                                <th class="text-end">Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.OrderItems)
+                            {
+                                <tr>
+                                    <td class="fw-bold">@item.Product?.Name</td>
+                                    <td>@item.UnitPrice.ToString("C")</td>
+                                    <td>x @item.Quantity</td>
+                                    <td class="text-end fw-bold">@((item.UnitPrice * item.Quantity).ToString("C"))</td>
+                                </tr>
+                            }
+                        </tbody>
+                        <tfoot class="bg-light">
+                            <tr>
+                                <td colspan="3" class="text-end fs-5 fw-bold">Grand Total:</td>
+                                <td class="text-end fs-5 fw-bold text-primary">@Model.OrderHeader.TotalAmount.ToString("C")</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

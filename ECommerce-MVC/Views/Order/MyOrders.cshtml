@@ -1,0 +1,66 @@
+﻿@model IEnumerable<ECommerce_MVC.Models.Model.Order>
+
+<div class="container mt-5">
+    <h2 class="mb-4"><i class="bi bi-box-seam"></i> My Order History</h2>
+
+    @if (!Model.Any())
+    {
+        <div class="text-center py-5 shadow-sm bg-white rounded">
+            <i class="bi bi-receipt text-muted" style="font-size: 4rem;"></i>
+            <h4 class="mt-3 text-muted">You haven't placed any orders yet.</h4>
+            <a asp-controller="Catalog" asp-action="Index" class="btn btn-primary mt-3">Start Shopping</a>
+        </div>
+    }
+    else
+    {
+        <div class="row">
+            @foreach (var order in Model)
+            {
+                <div class="col-12 mb-4">
+                    <div class="card shadow-sm border-0">
+                        <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center py-3">
+                            <span class="fw-bold fs-5">Order: @order.OrderNumber</span>
+                            <span><i class="bi bi-calendar3"></i> @order.OrderDate.ToString("MMM dd, yyyy")</span>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <h5 class="card-title text-muted mb-3">Items Purchased</h5>
+                                    <ul class="list-group list-group-flush">
+                                        @foreach (var item in order.OrderItems)
+                                        {
+                                            <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                                                <span>
+                                                    <span class="fw-bold">@item.Product.Name</span>
+                                                    <span class="text-muted"> (x@item.Quantity)</span>
+                                                </span>
+                                                <span>@item.UnitPrice.ToString("C")</span>
+                                            </li>
+                                        }
+                                    </ul>
+                                </div>
+
+                                <div class="col-md-4 text-end border-start d-flex flex-column justify-content-center">
+                                    <p class="text-muted mb-1">Order Status</p>
+                                    <h5>
+                                        @if (order.Status == 1)
+                                        {
+                                            <span class="badge bg-warning text-dark px-3 py-2">Pending</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-success px-3 py-2">Shipped</span>
+                                        }
+                                    </h5>
+
+                                    <p class="text-muted mt-3 mb-1">Total Amount</p>
+                                    <h3 class="text-primary fw-bold">@order.TotalAmount.ToString("C")</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
